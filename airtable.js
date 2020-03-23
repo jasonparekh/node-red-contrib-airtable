@@ -52,6 +52,7 @@ module.exports = function (RED) {
       };
       node.on('input', function (msg) {
         node.sendMsg = function (err, result) {
+          msg = Object.assign({}, msg);
           if (err) {
             node.error(err.toString(), msg);
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
