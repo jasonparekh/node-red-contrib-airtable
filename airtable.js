@@ -97,7 +97,7 @@ module.exports = function (RED) {
             break;
           case 'update':
             msg.payload = node.convType(msg.payload, 'object');
-            base(table).update(msg.recId, msg.payload, node.sendMsg);
+            base(table).update(msg.recId, msg.payload, msg.options || {}, node.sendMsg);
             break;
           case 'replace':
             msg.payload = node.convType(msg.payload, 'object');
