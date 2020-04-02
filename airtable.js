@@ -96,7 +96,7 @@ module.exports = function (RED) {
             break;
           case 'create':
             msg.payload = node.convType(msg.payload, 'object');
-            base(table).create(msg.payload, node.sendMsg);
+            base(table).create(msg.payload, msg.options || {}, node.sendMsg);
             break;
           case 'update':
             msg.payload = node.convType(msg.payload, 'object');
@@ -104,7 +104,7 @@ module.exports = function (RED) {
             break;
           case 'replace':
             msg.payload = node.convType(msg.payload, 'object');
-            base(table).replace(msg.recId, msg.payload, node.sendMsg);
+            base(table).replace(msg.recId, msg.payload, msg.options || {}, node.sendMsg);
             break;
           case 'delete':
             msg.payload = node.convType(msg.payload, 'object');
