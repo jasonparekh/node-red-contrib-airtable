@@ -50,17 +50,18 @@ module.exports = function (RED) {
         }
         return payload;
       };
-      node.on('input', function (msg) {
-        node.sendMsg = function (err, result) {
+      node.on('input', function (msg, send, done) {
+        node.sendMsg = function (err, result, omitDone) {
           msg = Object.assign({}, msg);
           if (err) {
-            node.error(err.toString(), msg);
+            done(err);
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
           } else {
             msg.payload = { 'id': result.id, 'fields': result.fields };
             node.status({});
+            send(msg);
+            if (!omitDone) done();
           }
-          node.send(msg);
         };
         if(credentials.apiKey == '' || credentials.apiKey == null){
           node.sendMsg('API key Not found');
@@ -76,7 +77,7 @@ module.exports = function (RED) {
             base(table).select(msg.payload)
               .eachPage(function page(records, fetchNextPage) {
                 records.forEach(function(record) {
-                    node.sendMsg(null, record);
+                    node.sendMsg(null, record, true);
                 });
                 fetchNextPage();
               }, function done(err) {
@@ -84,6 +85,8 @@ module.exports = function (RED) {
                     node.error(err.toString(), msg);
                     console.error(err); 
                     return; 
+                  } else {
+                    done();
                   }
               });;
             break;
