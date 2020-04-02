@@ -80,7 +80,7 @@ module.exports = function (RED) {
                     node.sendMsg(null, record, true);
                 });
                 fetchNextPage();
-              }, function done(err) {
+              }, function doneCallback(err) {
                   if (err) { 
                     node.error(err.toString(), msg);
                     console.error(err); 
